@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
 {
@@ -38,15 +39,21 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $values = $request->validate([
+        $request->validate([
+            'image' => 'required',
             'name' => 'required',
             'price' => 'required',
             'quantity' => 'required',
             'category' => 'required',
         ]);
 
-
-        Product::create($values);
+        Product::create([
+            'name' => $request->name,
+            'image' => $this->storeImage($request),
+            'price' => $request->price,
+            'quantity' => $request->quantity,
+            'category' => $request->category
+        ]);
 
         return redirect('/products')->with('message', 'Product Added Successfully');
     }
@@ -70,7 +77,15 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        //
+        $product = Product::find($id);
+        $categories = Category::all();
+
+        $allData = [
+            'product' => $product,
+            'categories' => $categories
+        ];
+
+        return view('products.edit', ['product' => $allData]);
     }
 
     /**
@@ -82,7 +97,23 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if($request->image){
+            $product = Product::find($id);
+            File::delete(public_path().'/images/product-images/'.$product->image);
+            
+            Product::where('id',$id)->update([
+                'name' => $request->name,
+                'image' => $this->storeImage($request),
+                'price' => $request->price,
+                'quantity' => $request->quantity,
+                'category' => $request->category
+            ]);
+        }
+        else {
+            Product::where('id',$id)->update($request->except('_token', '_method'));
+        }
+
+        return redirect('/products')->with('message', 'Product Updated Successfully');
     }
 
     /**
@@ -92,9 +123,18 @@ class ProductController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {
+    {   
+        $product = Product::find($id);
+        File::delete(public_path().'/images/product-images/'.$product->image);
         Product::destroy($id);
-
         return redirect('products')->with('error', 'Product Deleted Successfully');
+    }
+
+    // Add image to public folder
+    private function storeImage($request){
+        $imgNewName = uniqid() . '-' . $request->name . '.' . $request->image->extension();
+        $path = public_path() . '/images/product-images';
+        $request->image->move($path, $imgNewName);
+        return $imgNewName;
     }
 }

@@ -21,8 +21,16 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('products.store') }}" method="POST">
+                        <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
+                            <div class="form-group">
+                                <label for="image">Product Image</label>
+                                <input type="file" name="image" class="form-control" id="image">
+
+                                @error('image')
+                                    <p class="text-danger text-sm">{{ $message }}</p>
+                                @enderror
+                            </div>
                             <div class="form-group">
                                 <label for="name">Product Name</label>
                                 <input type="text" name="name" id="name" class="form-control mt-2 @error('name') is-invalid @enderror" placeholder="Enter Product Name" value="{{ old('name') }}">
@@ -52,7 +60,7 @@
                                 <select name="category" class="form-control" id="category">
                                     <option value=""></option>
                                     @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                        <option value="{{ $category->name }}">{{ $category->name }}</option>
                                     @endforeach
                                 </select>
 

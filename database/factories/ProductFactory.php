@@ -18,6 +18,7 @@ class ProductFactory extends Factory
     {
         return [
             'name' => fake()->name(),
+            'image' => 'temp.jpg',
             'price' => fake()->numberBetween(1,5000),
             'quantity' => fake()->numberBetween(1,50),
             'category' => 6

@@ -36,6 +36,7 @@
                         <table id="datatablesSimple">
                             <thead>
                                 <tr>
+                                    <th>Product Image</th>
                                     <th>Product Name</th>
                                     <th>Price</th>
                                     <th>Qty</th>
@@ -46,6 +47,7 @@
                             </thead>
                             <tfoot>
                                 <tr>
+                                    <th>Product Image</th>
                                     <th>Product Name</th>
                                     <th>Price</th>
                                     <th>Qty</th>
@@ -57,6 +59,7 @@
                             <tbody>
                                 @foreach ($products as $product)    
                                     <tr>
+                                        <td><img src="{{ asset("images/product-images/$product->image") }}" width="100px" alt="{{ $product->name }}"></td>
                                         <td>{{ $product->name }}</td>
                                         <td>{{ $product->price }}</td>
                                         <td>{{ $product->quantity }}</td>

@@ -69,6 +69,7 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 ## Our App
 category (name, desc)
 Products (name, prices, qty, category)
+Orders (product_id, qty, total_price)
 vendor (name, location, number)
 vendorProducts (name, price, qty)
 Reports (Bill, qty, prodcuts, time wise report)

@@ -100,7 +100,7 @@ class ProductController extends Controller
         if($request->image){
             $product = Product::find($id);
             File::delete(public_path().'/images/product-images/'.$product->image);
-            
+                 
             Product::where('id',$id)->update([
                 'name' => $request->name,
                 'image' => $this->storeImage($request),

@@ -63,13 +63,12 @@
                                 <select name="category" class="form-control" id="category">
                                     <option value=""></option>
                                     @foreach ($product['categories'] as $category)
-                                        @if ($category->name == $product['product']->name)
+                                        @if ($category->name == $product['product']->category)
                                             <option selected value="{{ $category->name }}">{{ $category->name }}</option>
                                         @else
                                             <option value="{{ $category->name }}">{{ $category->name }}</option>
                                         @endif
                                     @endforeach
-
                                 </select>
 
                                 @error('category')

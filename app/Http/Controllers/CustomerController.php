@@ -2,20 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 
-class CategoryController extends Controller
+class CustomerController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
     /**
      * Display a listing of the resource.
      *
@@ -23,8 +14,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
-        return view('categories.all', ['categories' => $categories]);
+        return view('customers.all', ['customers' => Customer::all()]);
     }
 
     /**
@@ -34,7 +24,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('categories.add');
+        return view('customers.add');
     }
 
     /**
@@ -46,13 +36,15 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $values = $request->validate([
-            'name' => 'required|unique:categories',
-            'desc' => 'required'
+            'name' => 'required',
+            'number' => 'required|max:11',
+            'address' => 'required',
+            'balance' => 'required'
         ]);
 
-        Category::create($values);
+        Customer::create($values);
 
-        return redirect('categories')->with('message', 'Category Added Successfully');
+        return redirect('customers')->with('message', 'Customer Added Successfully');
     }
 
     /**
@@ -63,7 +55,7 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        dd('show method');
+        //
     }
 
     /**
@@ -74,8 +66,7 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        $category = Category::findOrFail($id);
-        return view('categories.edit', ['category' => $category]);
+        //
     }
 
     /**
@@ -87,14 +78,7 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'required|unique:categories',
-            'desc' => 'required'
-        ]);
-
-        Category::where('id', $id)->update($request->except('_token', '_method'));
-
-        return redirect('categories')->with('message', 'Category Updated Successfully');
+        //
     }
 
     /**
@@ -105,8 +89,6 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        Category::destroy($id);
-
-        return redirect('categories')->with('error', 'Category Deleted Successfully');
+        //
     }
 }

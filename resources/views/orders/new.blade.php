@@ -26,7 +26,7 @@
                                 <div class="col-6">
                                     <label for="product">Product</label>
                                     <select name="product" id="product" class="form-control product">
-                                        <option></option>
+                                        <option value="">Select the product</option>
                                         @foreach ($products as $product)
                                             <option value="{{ $product->id }}" qty="{{ $product->quantity }}" price="{{ $product->price }}">{{ $product->name }}</option>
                                         @endforeach
@@ -69,11 +69,10 @@
         let addProduct = document.getElementById('add-product');
         let form = document.getElementById('form');
         addProduct.addEventListener('click', function(){
-            form.innerHTML += `<div class="form-group row mt-2">
-                                    <div class="col-6">
+            let template = `<div class="col-6">
                                         <label for="product">Product</label>
                                         <select name="product" id="product" class="form-control product">
-                                                <option></option>
+                                        <option value="">Select the product</option>
                                             @foreach ($products as $product)
                                                 <option value="{{ $product->id }}" qty="{{ $product->quantity }}" price="{{ $product->price }}">{{ $product->name }}</option>
                                             @endforeach
@@ -86,9 +85,15 @@
                                     <div class="col-2">
                                         <label for="price">Price</label>
                                         <input type="number" class="form-control totalPrice" disabled id="price">
-                                    </div>
-                                </div>`;
-                                updateQty();
+                                    </div>`;
+
+            let newDiv = document.createElement('div');
+            newDiv.classList.add('form-group');
+            newDiv.classList.add('row');
+            newDiv.classList.add('mt-2');
+            newDiv.innerHTML = template;
+            form.appendChild(newDiv);
+            updateQty();
         });
     }
 
@@ -123,7 +128,6 @@
                 let totalPriceInput = document.querySelectorAll('.totalPrice');
                 let grandTotal = 0;
                 for(let i = 0; i < totalPriceInput.length; i++){
-                    // console.log(parseInt(totalPriceInput[i].value));
                     grandTotal += parseInt(totalPriceInput[i].value);
                 }
                 document.getElementById('grandTotal').innerHTML = grandTotal;

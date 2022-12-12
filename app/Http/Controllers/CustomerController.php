@@ -66,7 +66,7 @@ class CustomerController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('customers.edit', ['customer' => Customer::find($id)]);
     }
 
     /**
@@ -78,7 +78,16 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'number' => 'required|max:11',
+            'address' => 'required',
+            'balance' => 'required'
+        ]);
+
+        Customer::where('id', $id)->update($request->except('_token', '_method'));
+
+        return redirect('customers')->with('message', 'Customer Updated Successfully');
     }
 
     /**
@@ -89,6 +98,8 @@ class CustomerController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Customer::destroy($id);
+
+        return redirect('customers')->with('error', 'Customer Deleted Successfully');
     }
 }

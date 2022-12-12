@@ -62,8 +62,8 @@
                                         <td>{{ $customer->address }}</td>
                                         <td>{{ $customer->balance }}</td>
                                         <td>{{ $customer->created_at }}</td>
-                                        <td><a href="{{ route('categories.edit', $customer->id) }}" class="btn btn-warning my-2">EDIT</a>&nbsp;
-                                            <form action="{{ route('categories.destroy', $customer->id) }}" method="POST">
+                                        <td><a href="{{ route('customers.edit', $customer->id) }}" class="btn btn-warning my-2">EDIT</a>&nbsp;
+                                            <form action="{{ route('customers.destroy', $customer->id) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
                                                 <input type="submit" value="DELETE" class="btn btn-danger">

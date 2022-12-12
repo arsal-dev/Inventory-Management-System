@@ -23,6 +23,21 @@
                     <div class="card-body">
                         <form action="" id="form">
                             <div class="form-group row">
+                                <div class="col-10">
+                                    <label for="customer">Customer</label>
+                                    <select name="customer" id="customer" class="form-control">
+                                        <option value="">Select Customer</option>
+                                        @foreach ($customers as $customer)
+                                            <option value="{{ $customer->id }}" balance="{{ $customer->balance }}">{{ $customer->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-2">
+                                    <label for="balance">Balance</label>
+                                    <input type="text" disabled class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row mt-2 selected-products">
                                 <div class="col-6">
                                     <label for="product">Product</label>
                                     <select name="product" id="product" class="form-control product">
@@ -48,7 +63,7 @@
                                 Total Price: <span id="grandTotal" class="text-success">0</span>
                             </div>
                             <div>
-                                <button class="btn btn-primary" id="add-product">Add Order</button>
+                                <button class="btn btn-primary" id="add-order">Add Order</button>
                             </div>
                         </div>
                     </div>
@@ -91,6 +106,7 @@
             newDiv.classList.add('form-group');
             newDiv.classList.add('row');
             newDiv.classList.add('mt-2');
+            newDiv.classList.add('selected-products');
             newDiv.innerHTML = template;
             form.appendChild(newDiv);
             updateQty();
@@ -134,5 +150,28 @@
             });
         }
     }
+
+
+    let customer = document.getElementById('customer');
+    customer.addEventListener('change', function(){
+        let balance = this.options[this.selectedIndex].getAttribute('balance');
+        this.parentElement.nextSibling.nextSibling.children[1].value = balance;
+    });
+
+
+    document.getElementById('add-order').addEventListener('click', function(){
+        let selectedProducts = document.querySelectorAll('.selected-products');
+        let productsArr = [];
+        for(let i = 0; i < selectedProducts.length; i++){
+            let obj = {
+                product_id: selectedProducts[i].children[0].children[1].value,
+                qty: selectedProducts[i].children[1].children[1].value,
+                price: selectedProducts[i].children[2].children[1].value
+            }
+            productsArr.push(obj);
+        }
+        let customerObj = { customer_id: customer.value };
+        productsArr.push(customerObj);
+    });
 </script>
 @endsection

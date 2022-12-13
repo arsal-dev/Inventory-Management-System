@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Customer;
+use App\Models\Order;
 use App\Models\Product;
+use App\Models\Customer;
 use Illuminate\Http\Request;
+use App\Models\Ordered_product;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -91,5 +94,29 @@ class OrderController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    // add order fuction
+    public function addOrder(){
+        $data = json_decode(file_get_contents('php://input'), true);
+        Order::create([
+            'customer_id' => $data['customer'],
+            'total_amount' => $data['total_amount']
+        ]);
+
+        $order_id = DB::getPdo()->lastInsertId();
+
+        for($i = 0; $i < count($data['products']); $i++){
+            Ordered_product::create([
+                'product_id' => $data['products'][$i]['product_id'],
+                'product_qty' => $data['products'][$i]['qty'],
+                'product_amount' => $data['products'][$i]['price'],
+                'order_id' => $order_id
+            ]);
+        }
+
+        return response()->json([
+            'response' => 'Order Added Successfully'
+        ], 200);
     }
 }

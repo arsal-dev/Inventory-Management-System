@@ -26,4 +26,5 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::resource('/categories', CategoryController::class);
 Route::resource('/products', ProductController::class);
 Route::resource('/orders', OrderController::class);
+Route::post('/orders/add-order', [OrderController::class, 'addOrder']);
 Route::resource('/customers', CustomerController::class);

@@ -5,6 +5,9 @@
     @include('partials.navbar')
     <div id="layoutSidenav_content">
         <main>
+            <div class="d-none" id="token">
+                @csrf
+            </div>
             <div class="container-fluid px-4">
                 <h1 class="mt-4">Orders</h1>
                 <ol class="breadcrumb mb-4">
@@ -159,7 +162,7 @@
     });
 
 
-    document.getElementById('add-order').addEventListener('click', function(){
+    document.getElementById('add-order').addEventListener('click', async function(){
         let selectedProducts = document.querySelectorAll('.selected-products');
         let productsArr = [];
         for(let i = 0; i < selectedProducts.length; i++){
@@ -170,8 +173,18 @@
             }
             productsArr.push(obj);
         }
-        let customerObj = { customer_id: customer.value };
-        productsArr.push(customerObj);
+
+        let response = await fetch('/orders/add-order', {
+            method: "POST",
+            headers: {
+                "X-CSRF-TOKEN": document.getElementById('token').children[0].value,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({products: productsArr, customer: customer.value, total_amount: document.getElementById('grandTotal').innerHTML})
+        });
+
+        response = await response.json();
+        console.log(response);
     });
 </script>
 @endsection

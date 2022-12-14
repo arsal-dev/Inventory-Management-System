@@ -27,4 +27,5 @@ Route::resource('/categories', CategoryController::class);
 Route::resource('/products', ProductController::class);
 Route::resource('/orders', OrderController::class);
 Route::post('/orders/add-order', [OrderController::class, 'addOrder']);
+Route::get('/orders/all-orders', [OrderController::class, 'allOrders']);
 Route::resource('/customers', CustomerController::class);

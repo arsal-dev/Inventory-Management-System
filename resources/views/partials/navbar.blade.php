@@ -28,6 +28,9 @@
                     <nav class="sb-sidenav-menu-nested nav">
                         <a class="nav-link" href="/orders">New Order</a>
                     </nav>
+                    <nav class="sb-sidenav-menu-nested nav">
+                        <a class="nav-link" href="/orders/all-orders">All Orders</a>
+                    </nav>
                 </div>
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#customers" aria-expanded="false" aria-controls="customers">
                 <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>

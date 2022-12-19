@@ -31,75 +31,9 @@ class OrderController extends Controller
         return view('orders.new', ['products' => Product::all(), 'customers' => Customer::all()]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
     // show all orders
     public function allOrders(){
-        return view('orders.all');
+        return view('orders.all', ['orders' => Order::all()]);
     }
 
     // add order fuction
@@ -139,5 +73,42 @@ class OrderController extends Controller
         return response()->json([
             'response' => 'Order Added Successfully'
         ], 200);
+    }
+
+    // order marked paid
+    public function orderPaid(Request $request){
+        Order::where('id', $request->id)->update([
+            'paid' => 1
+        ]);
+
+        return redirect('orders/all-orders')->with('message', 'Order Marked Paid');
+    }
+
+    // order marked unpaid
+    public function orderUnPaid(Request $request){
+        Order::where('id', $request->id)->update([
+            'paid' => 0
+        ]);
+
+        return redirect('orders/all-orders')->with('message', 'Order Marked unPaid');
+    }
+    
+    // destory order
+    public function destroy(Request $request){
+        $product = Ordered_product::where("order_id",$request->id)->get();
+
+        for($i = 0; count($product); $i++){
+            $customer = Customer::where('id',$product[$i]->product_id)->get();
+        }
+        
+        $total_qty = $product->product_qty + $customer->quantity;
+
+        Customer::where('id',$product->product_id)->update([
+            'quantity' => $total_qty
+        ]);
+
+        Ordered_product::where("order_id",$request->id)->delete();
+        Order::destroy($request->id);
+        return redirect('orders/all-orders')->with('error', 'Order Deleted Successfully');
     }
 }

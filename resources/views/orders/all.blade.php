@@ -29,7 +29,7 @@
                             All Orders
                         </div>
                         <div>
-                            <a href="./categories/create" class="btn btn-primary">Add Categories</a>
+                            <a href="/orders" class="btn btn-primary">Add Order</a>
                         </div>
                     </div>
                     <div class="card-body">
@@ -51,18 +51,24 @@
                                 </tr>
                             </tfoot>
                             <tbody>
-                                @foreach ($categories as $category)    
+                                @foreach ($orders as $order)    
                                     <tr>
-                                        <td>{{ $category->name }}</td>
-                                        <td>{{ $category->desc }}</td>
-                                        <td>{{ $category->created_at }}</td>
-                                        <td><a href="{{ route('categories.edit', $category->id) }}" class="btn btn-warning my-2">EDIT</a>&nbsp;
-                                            <form action="{{ route('categories.destroy', $category->id) }}" method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <input type="submit" value="DELETE" class="btn btn-danger">
-                                            </form>
-                                        
+                                        <td>{{ $order->customer_id }}</td>
+                                        <td>{{ $order->total_amount }}</td>
+                                        @if ($order->paid == 0)
+                                            <td>Not Paid</td>
+                                        @elseif ($order->paid == 1)
+                                            <td>Order Paid</td>
+                                        @endif
+                                        <td>{{ $order->created_at }}</td>
+                                        <td>
+                                            @if ($order->paid == 0)
+                                                <a href="/orders/paid?id={{ $order->id }}" class="btn btn-primary mb-2">Mark paid</a>
+                                            @elseif ($order->paid == 1)
+                                            <a href="/orders/unpaid?id={{ $order->id }}" class="btn btn-warning mb-2">Mark unPaid</a>
+                                            @endif
+                                            &nbsp;
+                                            <a href="/orders/destroy?id={{ $order->id }}" class="btn btn-danger">DELETE</a>
                                         </td>
                                     </tr>
                                 @endforeach

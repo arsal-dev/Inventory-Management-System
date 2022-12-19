@@ -25,7 +25,12 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::resource('/categories', CategoryController::class);
 Route::resource('/products', ProductController::class);
-Route::resource('/orders', OrderController::class);
-Route::post('/orders/add-order', [OrderController::class, 'addOrder']);
-Route::get('/orders/all-orders', [OrderController::class, 'allOrders']);
+Route::controller(OrderController::class)->group(function () {
+    Route::get('/orders', 'index');
+    Route::post('/orders/add-order', 'addOrder');
+    Route::get('/orders/all-orders', 'allOrders');
+    Route::get('/orders/paid', 'orderPaid');
+    Route::get('/orders/unpaid', 'orderUnPaid');
+    Route::get('/orders/destroy', 'destroy');
+});
 Route::resource('/customers', CustomerController::class);
